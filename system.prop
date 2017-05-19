@@ -105,7 +105,7 @@ persist.ts.rtmakeup=true
 persist.capture.burst.exposures=-5,0,5
 
 #force HAL1 for below packages
-camera.hal1.packagelist=com.skype.raider,com.google.android.talk
+camera.hal1.packagelist=com.skype.raider,com.google.android.talk,com.google.android.GoogleCamera,com.tencent.mm
 
 #low power mode for camera
 camera.lowpower.record.enable=1
