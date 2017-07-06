@@ -273,10 +273,6 @@ PRODUCT_PACKAGES += \
     ipacm \
     libipanat
 
-# for off charging mode
-PRODUCT_PACKAGES += \
-    charger_res_images
-
 # Filesystem management tools
 PRODUCT_PACKAGES += \
     e2fsck \
