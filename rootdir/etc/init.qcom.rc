@@ -25,6 +25,7 @@
 # ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #
 
+import init.qcom.power.rc
 import init.qcom.usb.rc
 import init.target.rc
 
@@ -631,24 +632,8 @@ service qcom-sh /system/bin/sh /init.qcom.sh
     oneshot
     seclabel u:r:qti_init_shell:s0
 
-service qcom-post-boot /system/bin/sh /system/etc/init.qcom.post_boot.sh
-    class late_start
-    user root
-    disabled
-    oneshot
-    seclabel u:r:qti_init_shell:s0
-
-service config-zram /system/bin/sh /system/etc/init.qcom.zram.sh
-    class late_start
-    user root
-    disabled
-    oneshot
-    seclabel u:r:qti_init_shell:s0
-
 on property:sys.boot_completed=1
-    start qcom-post-boot
     start atfwd
-    start config-zram
 
 service atfwd /system/bin/ATFWD-daemon
     class late_start

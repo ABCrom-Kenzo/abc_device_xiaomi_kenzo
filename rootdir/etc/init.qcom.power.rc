@@ -1,26 +1,76 @@
-#!/system/bin/sh
+on boot
+    # Update foreground cpuset now that processors are up
+    # reserve CPU 3 for the top app and camera daemon
+    write /dev/cpuset/foreground/cpus 0-2,4-5
+    write /dev/cpuset/foreground/boost/cpus 4-5
+    write /dev/cpuset/background/cpus 0
+    write /dev/cpuset/system-background/cpus 0-2
+    write /dev/cpuset/top-app/cpus 0-5
 
-################################################################################
-# helper functions to allow Android init like script
+    # Add a cpuset for the camera daemon
+    # we want all the little cores for camera
+    mkdir /dev/cpuset/camera-daemon
+    write /dev/cpuset/camera-daemon/cpus 0-3
+    write /dev/cpuset/camera-daemon/mems 0
+    chown system system /dev/cpuset/camera-daemon
+    chown system system /dev/cpuset/camera-daemon/tasks
+    chmod 0664 /dev/cpuset/camera-daemon/tasks
 
-function write() {
-    echo -n $2 > $1
-}
+    # Enable sched boost
+    write /proc/sys/kernel/sched_boost 1
 
-function copy() {
-    cat $1 > $2
-}
+on property:sys.boot_completed=1
+    # according to Qcom this legacy value improves first launch latencies
+    # stock value is 512k
+    # from franciscofranco
+    setprop dalvik.vm.heapminfree 2m
 
-function get-set-forall() {
-    for f in $1 ; do
-        cat $f
-        write $f $2
-    done
-}
-
-################################################################################
-    MemTotalStr=`cat /proc/meminfo | grep MemTotal`
-    MemTotal=${MemTotalStr:16:8}
+    # Set I/O Scheduler
+    setprop sys.io.scheduler maple
+    # MMCBLK0
+    write /sys/block/mmcblk0/queue/scheduler maple
+    write /sys/block/mmcblk0/queue/read_ahead_kb 512
+    write /sys/block/mmcblk0/queue/iostats 0
+	write /sys/block/mmcblk0/queue/iosched/sync_read_expire 100
+	write /sys/block/mmcblk0/queue/iosched/sync_write_expire 350
+	write /sys/block/mmcblk0/queue/iosched/async_read_expire 200
+	write /sys/block/mmcblk0/queue/iosched/async_write_expire 500
+	write /sys/block/mmcblk0/queue/iosched/fifo_batch 16
+	write /sys/block/mmcblk0/queue/iosched/writes_starved 3
+	write /sys/block/mmcblk0/queue/iosched/sleep_latency_multiple 5
+    # MMCBLK1
+    write /sys/block/mmcblk1/queue/scheduler maple
+    write /sys/block/mmcblk1/queue/read_ahead_kb 512
+    write /sys/block/mmcblk1/queue/iostats 0
+	write /sys/block/mmcblk1/queue/iosched/sync_read_expire 100
+	write /sys/block/mmcblk1/queue/iosched/sync_write_expire 350
+	write /sys/block/mmcblk1/queue/iosched/async_read_expire 200
+	write /sys/block/mmcblk1/queue/iosched/async_write_expire 500
+	write /sys/block/mmcblk1/queue/iosched/fifo_batch 16
+	write /sys/block/mmcblk1/queue/iosched/writes_starved 3
+	write /sys/block/mmcblk1/queue/iosched/sleep_latency_multiple 5
+    # DM-0
+    write /sys/block/dm-0/queue/scheduler maple
+    write /sys/block/dm-0/queue/read_ahead_kb 512
+    write /sys/block/dm-0/queue/iostats 0
+	write /sys/block/dm-0/queue/iosched/sync_read_expire 100
+	write /sys/block/dm-0/queue/iosched/sync_write_expire 350
+	write /sys/block/dm-0/queue/iosched/async_read_expire 200
+	write /sys/block/dm-0/queue/iosched/async_write_expire 500
+	write /sys/block/dm-0/queue/iosched/fifo_batch 16
+	write /sys/block/dm-0/queue/iosched/writes_starved 3
+	write /sys/block/dm-0/queue/iosched/sleep_latency_multiple 5
+    # DM-1
+    write /sys/block/dm-1/queue/scheduler maple
+    write /sys/block/dm-1/queue/read_ahead_kb 512
+    write /sys/block/dm-1/queue/iostats 0
+	write /sys/block/dm-1/queue/iosched/sync_read_expire 100
+	write /sys/block/dm-1/queue/iosched/sync_write_expire 350
+	write /sys/block/dm-1/queue/iosched/async_read_expire 200
+	write /sys/block/dm-1/queue/iosched/async_write_expire 500
+	write /sys/block/dm-1/queue/iosched/fifo_batch 16
+	write /sys/block/dm-1/queue/iosched/writes_starved 3
+	write /sys/block/dm-1/queue/iosched/sleep_latency_multiple 5
 
     # HMP scheduler (big.Little cluster related) settings
     write /proc/sys/kernel/sched_boost 0
@@ -145,20 +195,6 @@ function get-set-forall() {
     write /sys/devices/system/cpu/cpu0/sched_mostly_idle_freq 1017600
     write /sys/devices/system/cpu/cpu4/sched_mostly_idle_freq 0
 
-    # Read adj series and set adj threshold for PPR and ALMK.
-    # This is required since adj values change from framework to framework.
-    adj_series=`cat /sys/module/lowmemorykiller/parameters/adj`
-    adj_1="${adj_series#*,}"
-    set_almk_ppr_adj="${adj_1%%,*}"
-
-    # PPR and ALMK should not act on HOME adj and below.
-    # Normalized ADJ for HOME is 6. Hence multiply by 6
-    # ADJ score represented as INT in LMK params, actual score can be in decimal
-    # Hence add 6 considering a worst case of 0.9 conversion to INT (0.9*6).
-    set_almk_ppr_adj=$(((set_almk_ppr_adj * 6) + 6))
-    echo $set_almk_ppr_adj > /sys/module/lowmemorykiller/parameters/adj_max_shift
-    echo $set_almk_ppr_adj > /sys/module/process_reclaim/parameters/min_score_adj
-
     #Set Low memory killer minfree parameters
     # 64 bit up to 2GB with use 14K, and above 2GB will use 18K
     #
@@ -166,22 +202,38 @@ function get-set-forall() {
     # 64 bit will have 81K 
     chmod 0660 /sys/module/lowmemorykiller/parameters/minfree
 
-    if [ $MemTotal -gt 2000000 ]; then
-        echo 0 > /sys/module/lowmemorykiller/parameters/enable_adaptive_lmk
-        echo 10 > /sys/module/process_reclaim/parameters/pressure_min
-        echo 1024 > /sys/module/process_reclaim/parameters/per_swap_size
-        echo "18432,23040,27648,32256,55296,80640" > /sys/module/lowmemorykiller/parameters/minfree
-        echo 81250 > /sys/module/lowmemorykiller/parameters/vmpressure_file_min
-    else
-        echo 1 > /sys/module/lowmemorykiller/parameters/enable_adaptive_lmk
-        echo 10 > /sys/module/process_reclaim/parameters/pressure_min
-        echo 1024 > /sys/module/process_reclaim/parameters/per_swap_size
-        echo "14746,18432,22118,25805,40000,55000" > /sys/module/lowmemorykiller/parameters/minfree
-        echo 81250 > /sys/module/lowmemorykiller/parameters/vmpressure_file_min 
-    fi
-
     # Vibrator intensity (max - 3596, min - 116)
     write /sys/class/timed_output/vibrator/vtg_level 1800
 
-    # Set scheduler
-    write /sys/block/mmcblk0/queue/scheduler noop
+on charger
+    # Disable thermal
+    write /sys/module/msm_thermal/core_control/enabled 0
+
+    # Bring CPUs online
+    write /sys/devices/system/cpu/cpu1/online 1
+    write /sys/devices/system/cpu/cpu2/online 1
+    write /sys/devices/system/cpu/cpu3/online 1
+    write /sys/devices/system/cpu/cpu4/online 1
+    write /sys/devices/system/cpu/cpu5/online 1
+
+    # Configure governor settings for little cluster
+    write /sys/devices/system/cpu/cpu0/cpufreq/scaling_governor "powersave"
+    write /sys/devices/system/cpu/cpu0/cpufreq/scaling_min_freq 400000
+
+    # Configure governor settings for big cluster
+    write /sys/devices/system/cpu/cpu4/cpufreq/scaling_governor "powersave"
+    write /sys/devices/system/cpu/cpu4/cpufreq/scaling_min_freq 400000
+
+    # Bring CPUs offline
+    write /sys/devices/system/cpu/cpu1/online 0
+    write /sys/devices/system/cpu/cpu2/online 0
+    write /sys/devices/system/cpu/cpu3/online 0
+    write /sys/devices/system/cpu/cpu4/online 0
+    write /sys/devices/system/cpu/cpu5/online 0
+
+    # Enable thermal
+    write /sys/module/msm_thermal/core_control/enabled 1
+
+    # Set perfd properties
+    rm /data/system/perfd/default_values
+    start perfd
