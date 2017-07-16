@@ -92,7 +92,6 @@ PRODUCT_COPY_FILES += \
 PRODUCT_COPY_FILES += \
     device/xiaomi/kenzo/audio/audio_policy.conf:system/etc/audio_policy.conf \
     device/xiaomi/kenzo/audio/audio_output_policy.conf:system/vendor/etc/audio_output_policy.conf \
-    device/xiaomi/kenzo/audio/audio_effects.conf:system/vendor/etc/audio_effects.conf \
     device/xiaomi/kenzo/audio/mixer_paths_mtp.xml:system/etc/mixer_paths_mtp.xml \
     device/xiaomi/kenzo/audio/mixer_paths_wcd9326.xml:system/etc/mixer_paths_wcd9326.xml \
     device/xiaomi/kenzo/audio/sound_trigger_mixer_paths_wcd9335.xml:system/etc/sound_trigger_mixer_paths_wcd9335.xml \
