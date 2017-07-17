@@ -31,46 +31,46 @@ on property:sys.boot_completed=1
     write /sys/block/mmcblk0/queue/scheduler maple
     write /sys/block/mmcblk0/queue/read_ahead_kb 512
     write /sys/block/mmcblk0/queue/iostats 0
-	write /sys/block/mmcblk0/queue/iosched/sync_read_expire 100
-	write /sys/block/mmcblk0/queue/iosched/sync_write_expire 350
-	write /sys/block/mmcblk0/queue/iosched/async_read_expire 200
-	write /sys/block/mmcblk0/queue/iosched/async_write_expire 500
-	write /sys/block/mmcblk0/queue/iosched/fifo_batch 16
-	write /sys/block/mmcblk0/queue/iosched/writes_starved 3
-	write /sys/block/mmcblk0/queue/iosched/sleep_latency_multiple 5
+    write /sys/block/mmcblk0/queue/iosched/sync_read_expire 100
+    write /sys/block/mmcblk0/queue/iosched/sync_write_expire 350
+    write /sys/block/mmcblk0/queue/iosched/async_read_expire 200
+    write /sys/block/mmcblk0/queue/iosched/async_write_expire 500
+    write /sys/block/mmcblk0/queue/iosched/fifo_batch 16
+    write /sys/block/mmcblk0/queue/iosched/writes_starved 3
+    write /sys/block/mmcblk0/queue/iosched/sleep_latency_multiple 5
     # MMCBLK1
     write /sys/block/mmcblk1/queue/scheduler maple
     write /sys/block/mmcblk1/queue/read_ahead_kb 512
     write /sys/block/mmcblk1/queue/iostats 0
-	write /sys/block/mmcblk1/queue/iosched/sync_read_expire 100
-	write /sys/block/mmcblk1/queue/iosched/sync_write_expire 350
-	write /sys/block/mmcblk1/queue/iosched/async_read_expire 200
-	write /sys/block/mmcblk1/queue/iosched/async_write_expire 500
-	write /sys/block/mmcblk1/queue/iosched/fifo_batch 16
-	write /sys/block/mmcblk1/queue/iosched/writes_starved 3
-	write /sys/block/mmcblk1/queue/iosched/sleep_latency_multiple 5
+    write /sys/block/mmcblk1/queue/iosched/sync_read_expire 100
+    write /sys/block/mmcblk1/queue/iosched/sync_write_expire 350
+    write /sys/block/mmcblk1/queue/iosched/async_read_expire 200
+    write /sys/block/mmcblk1/queue/iosched/async_write_expire 500
+    write /sys/block/mmcblk1/queue/iosched/fifo_batch 16
+    write /sys/block/mmcblk1/queue/iosched/writes_starved 3
+    write /sys/block/mmcblk1/queue/iosched/sleep_latency_multiple 5
     # DM-0
     write /sys/block/dm-0/queue/scheduler maple
     write /sys/block/dm-0/queue/read_ahead_kb 512
     write /sys/block/dm-0/queue/iostats 0
-	write /sys/block/dm-0/queue/iosched/sync_read_expire 100
-	write /sys/block/dm-0/queue/iosched/sync_write_expire 350
-	write /sys/block/dm-0/queue/iosched/async_read_expire 200
-	write /sys/block/dm-0/queue/iosched/async_write_expire 500
-	write /sys/block/dm-0/queue/iosched/fifo_batch 16
-	write /sys/block/dm-0/queue/iosched/writes_starved 3
-	write /sys/block/dm-0/queue/iosched/sleep_latency_multiple 5
+    write /sys/block/dm-0/queue/iosched/sync_read_expire 100
+    write /sys/block/dm-0/queue/iosched/sync_write_expire 350
+    write /sys/block/dm-0/queue/iosched/async_read_expire 200
+    write /sys/block/dm-0/queue/iosched/async_write_expire 500
+    write /sys/block/dm-0/queue/iosched/fifo_batch 16
+    write /sys/block/dm-0/queue/iosched/writes_starved 3
+    write /sys/block/dm-0/queue/iosched/sleep_latency_multiple 5
     # DM-1
     write /sys/block/dm-1/queue/scheduler maple
     write /sys/block/dm-1/queue/read_ahead_kb 512
     write /sys/block/dm-1/queue/iostats 0
-	write /sys/block/dm-1/queue/iosched/sync_read_expire 100
-	write /sys/block/dm-1/queue/iosched/sync_write_expire 350
-	write /sys/block/dm-1/queue/iosched/async_read_expire 200
-	write /sys/block/dm-1/queue/iosched/async_write_expire 500
-	write /sys/block/dm-1/queue/iosched/fifo_batch 16
-	write /sys/block/dm-1/queue/iosched/writes_starved 3
-	write /sys/block/dm-1/queue/iosched/sleep_latency_multiple 5
+    write /sys/block/dm-1/queue/iosched/sync_read_expire 100
+    write /sys/block/dm-1/queue/iosched/sync_write_expire 350
+    write /sys/block/dm-1/queue/iosched/async_read_expire 200
+    write /sys/block/dm-1/queue/iosched/async_write_expire 500
+    write /sys/block/dm-1/queue/iosched/fifo_batch 16
+    write /sys/block/dm-1/queue/iosched/writes_starved 3
+    write /sys/block/dm-1/queue/iosched/sleep_latency_multiple 5
 
     # HMP scheduler (big.Little cluster related) settings
     write /proc/sys/kernel/sched_boost 0
@@ -204,6 +204,9 @@ on property:sys.boot_completed=1
 
     # Vibrator intensity (max - 3596, min - 116)
     write /sys/class/timed_output/vibrator/vtg_level 1800
+
+    # enable Audio High Performance Mode 
+    write /sys/module/snd_soc_msm8x16_wcd/parameters/high_perf_mode 1
 
 on charger
     # Disable thermal
