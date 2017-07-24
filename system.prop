@@ -239,3 +239,7 @@ persist.fuse_sdcard=true
 
 # Optimal dex2oat threads for faster app installation
 ro.sys.fw.dex2oat_thread_count=4
+
+# Higher fling velocities for smooth scrolling and to provide better responsiveness - From HalogenOS Team
+ro.min.fling_velocity=160
+ro.max.fling_velocity=20000
