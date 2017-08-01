@@ -238,6 +238,17 @@
     <!-- Operating volatage for wifi radio. 0 by default-->
     <integer translatable="false" name="config_wifi_operating_voltage_mv">3800</integer>
 
+    <!-- Does the battery LED support multiple colors? Used to decide if the user can change the colors -->
+     <bool name="config_multiColorBatteryLed">true</bool>
+
+    <!-- Does the notification LED support multiple colors?
+          Used to decide if the user can change the colors -->
+     <bool name="config_multiColorNotificationLed">true</bool>
+
+    <!-- Do the battery/notification LEDs support pulsing?
+         Used to decide if we show pulse settings -->
+     <bool name="config_ledCanPulse">true</bool>
+
     <!-- List of regexpressions describing the interface (if any) that represent tetherable
          USB interfaces.  If the device doesn't want to support tething over USB this should
          be empty.  An example would be "usb.*" -->
