@@ -20,57 +20,24 @@ on boot
     write /proc/sys/kernel/sched_boost 1
 
 on property:sys.boot_completed=1
-    # according to Qcom this legacy value improves first launch latencies
-    # stock value is 512k
-    # from franciscofranco
-    setprop dalvik.vm.heapminfree 2m
-
     # Set I/O Scheduler
-    setprop sys.io.scheduler maple
+    setprop sys.io.scheduler fiops
     # MMCBLK0
-    write /sys/block/mmcblk0/queue/scheduler maple
-    write /sys/block/mmcblk0/queue/read_ahead_kb 512
+    write /sys/block/mmcblk0/queue/scheduler fiops
+    write /sys/block/mmcblk0/queue/read_ahead_kb 256
     write /sys/block/mmcblk0/queue/iostats 0
-    write /sys/block/mmcblk0/queue/iosched/sync_read_expire 100
-    write /sys/block/mmcblk0/queue/iosched/sync_write_expire 350
-    write /sys/block/mmcblk0/queue/iosched/async_read_expire 200
-    write /sys/block/mmcblk0/queue/iosched/async_write_expire 500
-    write /sys/block/mmcblk0/queue/iosched/fifo_batch 16
-    write /sys/block/mmcblk0/queue/iosched/writes_starved 3
-    write /sys/block/mmcblk0/queue/iosched/sleep_latency_multiple 5
     # MMCBLK1
-    write /sys/block/mmcblk1/queue/scheduler maple
-    write /sys/block/mmcblk1/queue/read_ahead_kb 512
+    write /sys/block/mmcblk1/queue/scheduler fiops
+    write /sys/block/mmcblk1/queue/read_ahead_kb 256
     write /sys/block/mmcblk1/queue/iostats 0
-    write /sys/block/mmcblk1/queue/iosched/sync_read_expire 100
-    write /sys/block/mmcblk1/queue/iosched/sync_write_expire 350
-    write /sys/block/mmcblk1/queue/iosched/async_read_expire 200
-    write /sys/block/mmcblk1/queue/iosched/async_write_expire 500
-    write /sys/block/mmcblk1/queue/iosched/fifo_batch 16
-    write /sys/block/mmcblk1/queue/iosched/writes_starved 3
-    write /sys/block/mmcblk1/queue/iosched/sleep_latency_multiple 5
     # DM-0
-    write /sys/block/dm-0/queue/scheduler maple
-    write /sys/block/dm-0/queue/read_ahead_kb 512
+    write /sys/block/dm-0/queue/scheduler fiops
+    write /sys/block/dm-0/queue/read_ahead_kb 256
     write /sys/block/dm-0/queue/iostats 0
-    write /sys/block/dm-0/queue/iosched/sync_read_expire 100
-    write /sys/block/dm-0/queue/iosched/sync_write_expire 350
-    write /sys/block/dm-0/queue/iosched/async_read_expire 200
-    write /sys/block/dm-0/queue/iosched/async_write_expire 500
-    write /sys/block/dm-0/queue/iosched/fifo_batch 16
-    write /sys/block/dm-0/queue/iosched/writes_starved 3
-    write /sys/block/dm-0/queue/iosched/sleep_latency_multiple 5
     # DM-1
-    write /sys/block/dm-1/queue/scheduler maple
-    write /sys/block/dm-1/queue/read_ahead_kb 512
+    write /sys/block/dm-1/queue/scheduler fiops
+    write /sys/block/dm-1/queue/read_ahead_kb 256
     write /sys/block/dm-1/queue/iostats 0
-    write /sys/block/dm-1/queue/iosched/sync_read_expire 100
-    write /sys/block/dm-1/queue/iosched/sync_write_expire 350
-    write /sys/block/dm-1/queue/iosched/async_read_expire 200
-    write /sys/block/dm-1/queue/iosched/async_write_expire 500
-    write /sys/block/dm-1/queue/iosched/fifo_batch 16
-    write /sys/block/dm-1/queue/iosched/writes_starved 3
-    write /sys/block/dm-1/queue/iosched/sleep_latency_multiple 5
 
     # HMP scheduler (big.Little cluster related) settings
     write /proc/sys/kernel/sched_boost 0
@@ -195,12 +162,17 @@ on property:sys.boot_completed=1
     write /sys/devices/system/cpu/cpu0/sched_mostly_idle_freq 1017600
     write /sys/devices/system/cpu/cpu4/sched_mostly_idle_freq 0
 
-    #Set Low memory killer minfree parameters
-    # 64 bit up to 2GB with use 14K, and above 2GB will use 18K
-    #
-    # Set ALMK parameters (usually above the highest minfree values)
-    # 64 bit will have 81K 
-    chmod 0660 /sys/module/lowmemorykiller/parameters/minfree
+    # Set LMK
+    write /sys/module/lowmemorykiller/parameters/enable_adaptive_lmk 1
+    write /sys/module/lowmemorykiller/parameters/debug_level 0
+    write /sys/module/lowmemorykiller/parameters/adj_max_shift 354
+    write /sys/module/lowmemorykiller/parameters/vmpressure_file_min 81250
+    write /sys/module/lowmemorykiller/parameters/enable_process_reclaim 1
+    write /sys/module/lowmemorykiller/parameters/min_score_adj 354
+    write /sys/module/lowmemorykiller/parameters/per_swap_size 1024
+    write /sys/module/lowmemorykiller/parameters/pressure_min 10
+    write /sys/module/lowmemorykiller/parameters/pressure_max 70
+    write /sys/module/lowmemorykiller/parameters/swap_opt_eff 30
 
     # Vibrator intensity (max - 3596, min - 116)
     write /sys/class/timed_output/vibrator/vtg_level 1800
