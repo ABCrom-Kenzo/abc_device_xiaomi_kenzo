@@ -152,7 +152,8 @@ PRODUCT_COPY_FILES += \
 
 # Libshims
 PRODUCT_PACKAGES += \
-    libshims_ims
+    libshims_ims \
+    libshims_get_process_name
 
 # Light
 PRODUCT_PACKAGES += \
