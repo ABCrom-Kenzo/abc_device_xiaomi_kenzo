@@ -184,6 +184,9 @@ PRODUCT_PACKAGES += \
     libOmxVdec \
     libOmxVdecHevc \
     libOmxVenc
+	
+# QPerformance
+PRODUCT_BOOT_JARS += QPerformance
 
 # Misc dependency packages
 PRODUCT_PACKAGES += \
