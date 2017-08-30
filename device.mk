@@ -93,10 +93,6 @@ PRODUCT_PACKAGES += \
     Snap \
     camera.msm8952
 
-# Charging
-PRODUCT_PACKAGES += \
-    charger_res_images
-
 # Consumerir
 PRODUCT_PACKAGES += \
     consumerir.msm8952
@@ -317,3 +313,7 @@ $(call inherit-product-if-exists, frameworks/native/build/phone-xxhdpi-2048-hwui
 $(call inherit-product, $(LOCAL_PATH)/treble.mk)
 
 $(call inherit-product, $(LOCAL_PATH)/utils.mk)
+
+# for off charging mode
+PRODUCT_PACKAGES += \
+    charger_xiaomi
