@@ -85,6 +85,8 @@ on property:sys.boot_completed=1
     write /sys/devices/system/cpu/cpu0/cpufreq/interactive/min_sample_time 50000
     write /sys/devices/system/cpu/cpu0/cpufreq/interactive/align_windows 0
     write /sys/devices/system/cpu/cpu0/cpufreq/interactive/max_freq_hysteresis 166667
+    write /sys/devices/system/cpu/cpu0/cpufreq/interactive/fastlane 0
+    write /sys/devices/system/cpu/cpu0/cpufreq/interactive/powersave_bias 1
 
     # online CPU4
     write /sys/devices/system/cpu/cpu4/online 1
@@ -106,6 +108,9 @@ on property:sys.boot_completed=1
     write /sys/devices/system/cpu/cpu4/cpufreq/interactive/use_sched_load 0
     write /sys/devices/system/cpu/cpu4/cpufreq/interactive/max_freq_hysteresis 20000
     write /sys/devices/system/cpu/cpu4/cpufreq/interactive/boostpulse_duration 80000
+    write /sys/devices/system/cpu/cpu4/cpufreq/interactive/fastlane 0
+    write /sys/devices/system/cpu/cpu4/cpufreq/interactive/powersave_bias 1
+
 
     # input boost configuration
     write /sys/module/cpu_boost/parameters/input_boost_enabled 0
