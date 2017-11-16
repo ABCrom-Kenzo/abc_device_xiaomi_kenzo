@@ -1,8 +1,11 @@
-[/system/vendor/bin/wcnss_filter]
-mode: 0755
-user: AID_BLUETOOTH
-group: AID_BLUETOOTH
-caps: BLOCK_SUSPEND
+[AID_QCOM_DIAG]
+value:2950
+
+[AID_RFS]
+value:2951
+
+[AID_RFS_SHARED]
+value:2952
 
 [system/vendor/bin/cnss-daemon]
 mode: 0755
