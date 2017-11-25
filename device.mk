@@ -241,8 +241,7 @@ PRODUCT_PACKAGES += \
     fstab.qcom \
     vold.fstab \
     init.class_main.sh \
-    init.qcom.post_boot.sh \
-    init.qcom.zram.sh \
+    init.qcom.power.rc \
     init.qcom.rc \
     init.qcom.sh \
     init.qcom.usb.rc \
