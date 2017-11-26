@@ -29,4 +29,9 @@
     <bool name="doze_display_state_supported">true</bool>
     <!-- Doze: can we assume the pickup sensor includes a proximity check? -->
     <bool name="doze_pickup_performs_proximity_check">true</bool>
+	
+    <!-- Tiles native to System UI. Order should match "quick_settings_tiles_default" -->
+    <string name="quick_settings_tiles_stock" translatable="false">
+        wifi,cell,battery,dnd,flashlight,rotation,bt,airplane,location,hotspot,inversion,saver,work,cast,night,caffeine,adb_network,screenshot,ambient,pip,sound,volume
+    </string>
 </resources>
