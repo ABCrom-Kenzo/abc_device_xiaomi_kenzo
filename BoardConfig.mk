@@ -113,7 +113,7 @@ BOARD_ANT_WIRELESS_DEVICE := "vfs-prerelease"
 TARGET_SYSTEM_PROP += $(DEVICE_PATH)/system.prop
 
 # Recovery
-TARGET_RECOVERY_FSTAB := $(DEVICE_PATH)/rootdir/etc/fstab.qcom
+TARGET_RECOVERY_FSTAB := $(DEVICE_PATH)/recovery.fstab
 
 # SELinux
 BOARD_SEPOLICY_DIRS += \

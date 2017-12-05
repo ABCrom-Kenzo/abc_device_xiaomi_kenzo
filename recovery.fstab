@@ -1,36 +1,62 @@
-# Copyright (c) 2014, The Linux Foundation. All rights reserved.
-#
-# Redistribution and use in source and binary forms, with or without
-# modification, are permitted provided that the following conditions are
-# met:
-#     * Redistributions of source code must retain the above copyright
-#       notice, this list of conditions and the following disclaimer.
-#     * Redistributions in binary form must reproduce the above
-#       copyright notice, this list of conditions and the following
-#       disclaimer in the documentation and/or other materials provided
-#       with the distribution.
-#     * Neither the name of The Linux Foundation nor the names of its
-#       contributors may be used to endorse or promote products derived
-#       from this software without specific prior written permission.
-#
-# THIS SOFTWARE IS PROVIDED "AS IS" AND ANY EXPRESS OR IMPLIED
-# WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF
-# MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NON-INFRINGEMENT
-# ARE DISCLAIMED.  IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS
-# BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
-# CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
-# SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR
-# BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY,
-# WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE
-# OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN
-# IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+# Android fstab file.
+# The filesystem that contains the filesystem checker binary (typically /system) cannot
+# specify MF_CHECK, and must come before any filesystems that do specify MF_CHECK
 
-#device         mount point      fstype        [device2] [length=]
+#TODO: Add 'check' as fs_mgr_flags with data partition.
+# Currently we dont have e2fsck compiled. So fs check would failed.
 
-/dev/block/bootdevice/by-name/system       /system         ext4    ro,barrier=1                                                    wait
-/dev/block/bootdevice/by-name/cache        /cache          ext4    noatime,nosuid,nodev,barrier=1,data=ordered                     wait,check
-/dev/block/bootdevice/by-name/userdata     /data           ext4    noatime,nosuid,nodev,barrier=1,data=ordered,noauto_da_alloc     wait,check,length=-16384
-/dev/block/mmcblk1p1                              /sdcard           vfat    nosuid,nodev,barrier=1,data=ordered,nodelalloc                  wait
-/dev/block/bootdevice/by-name/boot         /boot           emmc    defaults                                                        defaults
-/dev/block/bootdevice/by-name/recovery     /recovery       emmc    defaults                                                        defaults
-/dev/block/bootdevice/by-name/misc         /misc           emmc    defaults                                                        defaults
+#<src>                                                <mnt_point>  <type>  <mnt_flags and options>                     <fs_mgr_flags>
+/system            ext4          /dev/block/bootdevice/by-name/system        flags=display="System"
+/data              ext4          /dev/block/bootdevice/by-name/userdata      flags=display="Data";encryptable=footer;length=-16384
+/cache             ext4          /dev/block/bootdevice/by-name/cache         flags=display="Cache"
+/cust              ext4          /dev/block/bootdevice/by-name/cust          flags=display="Cust";backup=1;wipeingui
+/persist           ext4          /dev/block/bootdevice/by-name/persist       flags=display="Persist";backup=1
+/modemst1          emmc          /dev/block/bootdevice/by-name/modemst1      flags=display="EFS";backup=1
+/modemst2          emmc          /dev/block/bootdevice/by-name/modemst2      flags=backup=1;subpartitionof=/modemst1
+/boot              emmc          /dev/block/bootdevice/by-name/boot          flags=display="Boot"
+/recovery          emmc          /dev/block/bootdevice/by-name/recovery      flags=display="Recovery";backup=1
+/misc              emmc          /dev/block/bootdevice/by-name/misc          flags=display="Misc";backup=1
+/sdcard1           vfat          /dev/block/mmcblk1p1 		             flags=fsflags=utf8;storage;wipeingui;removable
+/usb-otg           vfat          /dev/block/sda1 /dev/block/sda              flags=fsflags=utf8;storage;wipeingui;removable
+
+# ADD MISC PARTITION
+/rpm               emmc          /dev/block/bootdevice/by-name/rpm           flags=backup=1;subpartitionof=/firmware
+/tz                emmc          /dev/block/bootdevice/by-name/tz            flags=backup=1;subpartitionof=/firmware
+/sbl1              emmc          /dev/block/bootdevice/by-name/sbl1          flags=backup=1;subpartitionof=/firmware
+/hyp               emmc          /dev/block/bootdevice/by-name/hyp           flags=backup=1;subpartitionof=/firmware
+/aboot             emmc          /dev/block/bootdevice/by-name/aboot         flags=backup=1;subpartitionof=/firmware
+/rpmbak            emmc          /dev/block/bootdevice/by-name/rpmbak        flags=backup=1;subpartitionof=/firmware
+/tzbak             emmc          /dev/block/bootdevice/by-name/tzbak         flags=backup=1;subpartitionof=/firmware
+/sbl1bak           emmc          /dev/block/bootdevice/by-name/sbl1bak       flags=backup=1;subpartitionof=/firmware
+/hypbak            emmc          /dev/block/bootdevice/by-name/hypbak        flags=backup=1;subpartitionof=/firmware
+/abootbak          emmc          /dev/block/bootdevice/by-name/abootbak      flags=backup=1;subpartitionof=/firmware
+/mdtp              emmc          /dev/block/bootdevice/by-name/mdtp          flags=backup=1;subpartitionof=/firmware
+/firmware          emmc          /dev/block/bootdevice/by-name/modem         flags=display="Firmware-Update";backup=1
+/dsp               emmc          /dev/block/bootdevice/by-name/dsp           flags=backup=1;subpartitionof=/firmware
+# END
+
+# ADD EMMC BACKUP
+/frp               emmc          /dev/block/bootdevice/by-name/config      flags=backup=1;subpartitionof=/oem
+/DDR               emmc          /dev/block/bootdevice/by-name/DDR      flags=backup=1;subpartitionof=/oem
+/apdp              emmc          /dev/block/bootdevice/by-name/apdp     flags=backup=1;subpartitionof=/oem
+/cmnlib            emmc          /dev/block/bootdevice/by-name/cmnlib     flags=backup=1;subpartitionof=/oem
+/cmnlibbak         emmc          /dev/block/bootdevice/by-name/cmnlibbak     flags=backup=1;subpartitionof=/oem
+/devcfg            emmc          /dev/block/bootdevice/by-name/devcfg     flags=backup=1;subpartitionof=/oem
+/devinfo           emmc          /dev/block/bootdevice/by-name/devinfo     flags=backup=1;subpartitionof=/oem
+/dip               emmc          /dev/block/bootdevice/by-name/dip      flags=backup=1;subpartitionof=/oem
+/dpo               emmc          /dev/block/bootdevice/by-name/dpo     flags=backup=1;subpartitionof=/oem
+/fsc               emmc          /dev/block/bootdevice/by-name/fsc     flags=backup=1;subpartitionof=/oem
+/fsg               emmc          /dev/block/bootdevice/by-name/fsg     flags=backup=1;subpartitionof=/oem
+/keymaster         emmc          /dev/block/bootdevice/by-name/keymaster     flags=backup=1;subpartitionof=/oem
+/keymasterbak      emmc          /dev/block/bootdevice/by-name/keymasterbak     flags=backup=1;subpartitionof=/oem
+/keystore          emmc          /dev/block/bootdevice/by-name/keystore     flags=backup=1;subpartitionof=/oem
+/limits            emmc          /dev/block/bootdevice/by-name/limits     flags=backup=1;subpartitionof=/oem
+/mcfg              emmc          /dev/block/bootdevice/by-name/mcfg     flags=backup=1;subpartitionof=/oem
+/mota              emmc          /dev/block/bootdevice/by-name/mota    flags=backup=1;subpartitionof=/oem
+/msadp             emmc          /dev/block/bootdevice/by-name/msadp    flags=backup=1;subpartitionof=/oem
+/oem               emmc          /dev/block/bootdevice/by-name/oem     flags=display="EMMC-BACKUP";backup=1
+/sec               emmc          /dev/block/bootdevice/by-name/sec      flags=backup=1;subpartitionof=/oem
+/splash            emmc          /dev/block/bootdevice/by-name/splash      flags=backup=1;subpartitionof=/oem
+/ssd               emmc          /dev/block/bootdevice/by-name/ssd     flags=backup=1;subpartitionof=/oem
+/syscfg            emmc          /dev/block/bootdevice/by-name/syscfg     flags=backup=1;subpartitionof=/oem
+# END
