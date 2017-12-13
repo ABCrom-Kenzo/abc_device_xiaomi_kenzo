@@ -34,4 +34,9 @@
     <string name="quick_settings_tiles_stock" translatable="false">
         wifi,cell,battery,dnd,flashlight,rotation,bt,airplane,location,hotspot,inversion,saver,work,cast,night,caffeine,adb_network,screenshot,ambient,pip,sound,volume
     </string>
+
+    <!-- If true, enable the advance anti-falsing classifier on the lockscreen. On some devices it
+         does not work well, particularly with noisy touchscreens. Note that disabling it may
+         increase the rate of unintentional unlocks. -->
+    <bool name="config_lockscreenAntiFalsingClassifierEnabled">false</bool>
 </resources>
