@@ -1,10 +1,9 @@
-/*
- * Copyright (c) 2013, The Linux Foundation. All rights reserved.
+/* Copyright (c) 2016, The Linux Foundation. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are
  * met:
- * *    * Redistributions of source code must retain the above copyright
+ *     * Redistributions of source code must retain the above copyright
  *       notice, this list of conditions and the following disclaimer.
  *     * Redistributions in binary form must reproduce the above
  *       copyright notice, this list of conditions and the following
@@ -25,41 +24,25 @@
  * WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE
  * OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN
  * IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ *
  */
-#define LOG_NIDEBUG 0
 
-#include <errno.h>
-#include <string.h>
-#include <sys/types.h>
-#include <sys/stat.h>
-#include <fcntl.h>
-#include <dlfcn.h>
-#include <stdlib.h>
+#ifndef __POWERHINTPARSER__
+#define __POWERHINTPARSER__
 
-#define LOG_TAG "QCOM PowerHAL"
-#include <utils/Log.h>
-#include <hardware/hardware.h>
-#include <hardware/power.h>
+#define POWERHINT_XML      "/vendor/etc/powerhint.xml"
+#define MAX_HINT 6
+#define MAX_PARAM 30
 
-#include "utils.h"
-#include "metadata-defs.h"
-#include "hint-data.h"
-#include "performance.h"
-#include "power-common.h"
+typedef struct perflock_param_t {
+    int type;
+    int numParams;
+    int paramList[MAX_PARAM];//static limit on number of hints - 15
+}perflock_param_t;
 
-static int display_hint_sent;
+static perflock_param_t powerhint[MAX_HINT];
 
-int power_hint_override(struct power_module *module, power_hint_t hint, void *data)
-{
-    switch(hint) {
-        case POWER_HINT_INTERACTION:
-        {
-            int resources[] = {0x702, 0x20B, 0x30B};
-            int duration = 3000;
+int parsePowerhintXML();
+int *getPowerhint(int, int*);
 
-            interaction(duration, sizeof(resources)/sizeof(resources[0]), resources);
-            return HINT_HANDLED;
-        }
-    }
-    return HINT_NONE;
-}
+#endif /* __POWERHINTPARSER__ */

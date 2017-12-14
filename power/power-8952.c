@@ -228,6 +228,9 @@ int  power_hint_override(struct power_module *module, power_hint_t hint,
 int  set_interactive_override(struct power_module *module, int on)
 {
     char governor[80];
+    char tmp_str[NODE_MAX];
+    struct video_encode_metadata_t video_encode_metadata;
+    int rc;
 
     ALOGI("Got set_interactive hint");
 
@@ -343,46 +346,6 @@ static void process_video_encode_hint(void *metadata)
         }
     }
     return;
-}
-
-#define DT2W_PATH "/sys/android_touch/doubletap2wake"
-#define S2W_PATH "/sys/android_touch/sweep2wake"
-#define VIB_PATH "/sys/android_touch/vib_strength"
-
-void set_feature(struct power_module *module, feature_t feature, int state)
-{
-    if (feature == POWER_FEATURE_DOUBLE_TAP_TO_WAKE) {
-        int mode, fd;
-        char buffer[16];
-
-        mode = property_get_int32("persist.wake_gesture.mode", 0);
-        if (mode < 0)
-        	mode = 0;
-
-        fd = open(DT2W_PATH, O_WRONLY);
-        if (fd >= 0) {
-        	snprintf(buffer, 16, "%d", state ? !mode : 0);
-            write(fd, buffer, strlen(buffer) + 1);
-            close(fd);
-        }
-
-        fd = open(S2W_PATH, O_WRONLY);
-        if (fd >= 0) {
-        	snprintf(buffer, 16, "%d", state ? mode : 0);
-            write(fd, buffer, strlen(buffer) + 1);
-            close(fd);
-        }
-
-        mode = property_get_int32("persist.wake_gesture.vib_strength", -1);
-        if (mode >= 0) {
-        	fd = open(VIB_PATH, O_WRONLY);
-            if (fd >= 0) {
-        	    snprintf(buffer, 16, "%d", mode);
-                write(fd, buffer, strlen(buffer) + 1);
-                close(fd);
-            }
-        }
-    }
 }
 
 #define PLATFORM_SLEEP_MODES 2
@@ -545,4 +508,3 @@ int get_platform_low_power_stats(struct power_module *module,
 
     return 0;
 }
-

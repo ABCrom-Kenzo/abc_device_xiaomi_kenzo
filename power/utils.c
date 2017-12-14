@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2012-2013, The Linux Foundation. All rights reserved.
+ * Copyright (c) 2012-2013,2015-2017, The Linux Foundation. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are
@@ -49,26 +49,24 @@ char scaling_gov_path[4][80] ={
     "sys/devices/system/cpu/cpu3/cpufreq/scaling_governor"
 };
 
+#define PERF_HAL_PATH "libqti-perfd-client.so"
 static void *qcopt_handle;
 static int (*perf_lock_acq)(unsigned long handle, int duration,
     int list[], int numArgs);
 static int (*perf_lock_rel)(unsigned long handle);
+static int (*perf_hint)(int, char *, int, int);
 static struct list_node active_hint_list_head;
 
 static void *get_qcopt_handle()
 {
-    char qcopt_lib_path[PATH_MAX] = {0};
     void *handle = NULL;
 
     dlerror();
 
-    if (property_get("ro.vendor.extension_library", qcopt_lib_path,
-                NULL)) {
-        handle = dlopen(qcopt_lib_path, RTLD_NOW);
-        if (!handle) {
-            ALOGE("Unable to open %s: %s\n", qcopt_lib_path,
-                    dlerror());
-        }
+    handle = dlopen(PERF_HAL_PATH, RTLD_NOW);
+    if (!handle) {
+        ALOGE("Unable to open %s: %s\n", PERF_HAL_PATH,
+                dlerror());
     }
 
     return handle;
@@ -95,6 +93,12 @@ static void __attribute__ ((constructor)) initialize(void)
 
         if (!perf_lock_rel) {
             ALOGE("Unable to get perf_lock_rel function handle.\n");
+        }
+
+        perf_hint = dlsym(qcopt_handle, "perf_hint");
+
+        if (!perf_hint) {
+            ALOGE("Unable to get perf_hint function handle.\n");
         }
     }
 }
@@ -198,6 +202,12 @@ int get_scaling_governor_check_cores(char governor[], int size,int core_num)
     return 0;
 }
 
+int is_interactive_governor(char* governor) {
+   if (strncmp(governor, INTERACTIVE_GOVERNOR, (strlen(INTERACTIVE_GOVERNOR)+1)) == 0)
+      return 1;
+   return 0;
+}
+
 void interaction(int duration, int num_args, int opt_list[])
 {
 #ifdef INTERACTION_BOOST
@@ -210,7 +220,7 @@ void interaction(int duration, int num_args, int opt_list[])
         if (perf_lock_acq) {
             lock_handle = perf_lock_acq(lock_handle, duration, opt_list, num_args);
             if (lock_handle == -1)
-                ALOGE("Failed to acquire lock.");
+                ALOGV("Failed to acquire lock.");
         }
     }
 #endif
@@ -226,13 +236,33 @@ int interaction_with_handle(int lock_handle, int duration, int num_args, int opt
         if (perf_lock_acq) {
             lock_handle = perf_lock_acq(lock_handle, duration, opt_list, num_args);
             if (lock_handle == -1)
-                ALOGE("Failed to acquire lock.");
+                ALOGV("Failed to acquire lock.");
         }
     }
     return lock_handle;
 #endif
     return 0;
 }
+
+//this is interaction_with_handle using perf_hint instead of
+//perf_lock_acq
+int perf_hint_enable(int hint_id , int duration)
+{
+    int lock_handle = 0;
+
+    if (duration < 0)
+        return 0;
+
+    if (qcopt_handle) {
+        if (perf_hint) {
+            lock_handle = perf_hint(hint_id, NULL, duration, -1);
+            if (lock_handle == -1)
+                ALOGV("Failed to acquire lock.");
+        }
+    }
+    return lock_handle;
+}
+
 
 void release_request(int lock_handle) {
     if (qcopt_handle && perf_lock_rel)
@@ -248,7 +278,7 @@ void perform_hint_action(int hint_id, int resource_values[], int num_resources)
                     num_resources);
 
             if (lock_handle == -1) {
-                ALOGE("Failed to acquire lock.");
+                ALOGV("Failed to acquire lock.");
             } else {
                 /* Add this handle to our internal hint-list. */
                 struct hint_data *new_hint =
