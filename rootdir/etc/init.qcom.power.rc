@@ -168,9 +168,6 @@ on property:sys.boot_completed=1
     write /sys/module/lowmemorykiller/parameters/pressure_max 70
     write /sys/module/lowmemorykiller/parameters/swap_opt_eff 30
 
-    # Vibrator intensity (max - 3596, min - 116)
-    write /sys/class/timed_output/vibrator/vtg_level 1800
-
     # enable Audio High Performance Mode 
     write /sys/module/snd_soc_msm8x16_wcd/parameters/high_perf_mode 1
 
