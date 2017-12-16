@@ -309,7 +309,8 @@ PRODUCT_PROPERTY_OVERRIDES += \
     persist.media.treble_omx=false
 
 PRODUCT_PACKAGES += \
-    XiaomiParts
+    XiaomiParts \
+    XiaomiDoze
 
 # setup dalvik vm and hwui configs.
 $(call inherit-product-if-exists, frameworks/native/build/phone-xxhdpi-2048-dalvik-heap.mk)
