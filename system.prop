@@ -244,6 +244,11 @@ ro.frp.pst=/dev/block/bootdevice/by-name/config
 persist.fuse_sdcard=true
 
 # Optimal dex2oat threads for faster app installation
-ro.sys.fw.dex2oat_thread_count=4
+# use 6 cores during bootup dex compilation
+dalvik.vm.boot-dex2oat-threads=6
+# use 4 cores durning normal dex compilation (app installations)
+dalvik.vm.dex2oat-threads=4
+# use 4 cores during boot image dex compilation
+dalvik.vm.image-dex2oat-threads=4
 
 ro.sys.sdcardfs=false
