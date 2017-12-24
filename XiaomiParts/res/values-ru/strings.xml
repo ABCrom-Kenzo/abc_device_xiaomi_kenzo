@@ -18,7 +18,6 @@
     <string name="advanced_settings">Настройки устройства</string>
     <string name="vib_strength_title_head">Сила вибрации</string>
     <string name="vib_strength_summary_head">Установить силу вибрации</string>
-    <string name="vib_test">Тест</string>
     <string name="taptowake_summary">Использовать двойное нажатие для включения</string>
     <string name="taptowake_title">Нажать для включения</string>
     <string name="device_doze_title">Индикация событий</string>
