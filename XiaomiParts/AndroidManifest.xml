@@ -13,12 +13,13 @@
         android:targetSdkVersion="21" />
     <application
         android:label="@string/advanced_settings"
-        android:theme="@style/XiaomiPartsTheme"
+        android:theme="@android:style/Theme.DeviceDefault.Settings"
         android:supportsRtl="true" >
         <activity
             android:name="org.omnirom.device.DeviceSettings"
             android:exported="true"
-            android:label="@string/advanced_settings" >
+            android:label="@string/advanced_settings"
+            android:launchMode="singleTask" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <!--<category android:name="android.intent.category.LAUNCHER" />-->
