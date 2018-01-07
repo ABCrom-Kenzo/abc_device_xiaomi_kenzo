@@ -53,7 +53,7 @@ LOCAL_C_INCLUDES := \
         $(LOCAL_PATH)/stack/common \
         frameworks/native/include/media/hardware \
         frameworks/native/include/media/openmax \
-        $(TARGET_OUT_HEADERS)/libstagefrighthw \
+        $(TARGET_OUT_HEADERS)/qcom/media \
         system/media/camera/include \
         $(LOCAL_PATH)/../mm-image-codec/qexif \
         $(LOCAL_PATH)/../mm-image-codec/qomx_core \
