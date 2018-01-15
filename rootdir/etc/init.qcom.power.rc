@@ -105,6 +105,8 @@ on property:sys.boot_completed=1
     write /sys/devices/system/cpu/cpu4/cpufreq/interactive/fastlane 0
     write /sys/devices/system/cpu/cpu4/cpufreq/interactive/powersave_bias 1
 
+    # Set Swappiness
+    write /proc/sys/vm/swappiness 60
 
     # input boost configuration
     write /sys/module/cpu_boost/parameters/input_boost_enabled 0
@@ -166,6 +168,11 @@ on property:sys.boot_completed=1
     write /sys/module/lowmemorykiller/parameters/pressure_min 10
     write /sys/module/lowmemorykiller/parameters/pressure_max 70
     write /sys/module/lowmemorykiller/parameters/swap_opt_eff 30
+
+    # Set Thermal
+    write /sys/module/msm_thermal/core_control/enabled 0
+    write /sys/module/msm_thermal/parameters/enabled N
+    write /sys/module/msm_thermal/parameters/temp_threshold 60
 
     # enable Audio High Performance Mode 
     write /sys/module/snd_soc_msm8x16_wcd/parameters/high_perf_mode 1
