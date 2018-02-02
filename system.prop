@@ -135,72 +135,28 @@ vidc.enc.narrow.searchrange=1
 # Audio
 af.fast_track_multiplier=1
 audio_hal.period_size=192
-
-#low audio flinger standby delay to reduce power consumption
-ro.audio.flinger_standbytime_ms=300
-
-#audio voice concurrency
-voice.playback.conc.disabled=true
-voice.record.conc.disabled=false
-voice.voip.conc.disabled=true
-#Decides the audio fallback path during voice call, deep-buffer and fast are the two allowed fallback paths now.
-voice.conc.fallbackpath=deep-buffer
-
-#fluencetype can be "fluence" or "fluencepro" or "none"
-ro.qc.sdk.audio.fluencetype=fluence
-persist.audio.fluence.voicecall=true
-persist.audio.fluence.voicerec=false
-persist.audio.fluence.speaker=true
-persist.audio.fluence.audiorec=false
-persist.audio.fluence.spk.mono=true
-
-#snapdragon value add features
-ro.qc.sdk.audio.ssr=false
-
-#Set for msm8952
-tunnel.audio.encode = false
-#Buffer size in kbytes for compress offload playback
-audio.offload.buffer.size.kb=64
-#Minimum duration for offload playback in secs
-audio.offload.min.duration.secs=30
-#Enable offload audio video playback by default
-audio.offload.video=false
-
-#PCM offload
-audio.offload.pcm.16bit.enable=false
-audio.offload.pcm.24bit.enable=true
-
-#Enable audio track offload by default
-audio.offload.track.enable=false
-
-#Enable music through deep buffer
 audio.deep_buffer.media=true
+vendor.audio.dolby.ds2.enabled=true
+vendor.audio.offload.buffer.size.kb=64
+vendor.audio.offload.gapless.enabled=true
+audio.offload.min.duration.secs=30
+vendor.audio.offload.multiple.enabled=false
+vendor.audio.offload.track.enable=false
+vendor.audio.playback.mch.downsample=true
+vendor.audio.safx.pbe.enabled=true
+persist.vendor.audio.fluence.speaker=true
+persist.vendor.audio.fluence.voicecall=true
 
-#Enable downsampling for multi-channel content > 48Khz
-audio.playback.mch.downsample=true
+ro.vendor.audio.sdk.fluencetype=fluence
+ro.vendor.audio.sdk.ssr=false
+vendor.audio.tunnel.encode=false
+vendor.voice.path.for.pcm.voip=true
+vendor.voice.conc.fallbackpath=deep-buffer
+vendor.voice.playback.conc.disabled=true
+vendor.voice.record.conc.disabled=false
 
-#enable voice path for PCM VoIP by default
-use.voice.path.for.pcm.voip=true
-
-#System property for FM transmitter
-ro.fm.transmitter=false
-
-#enable dsp gapless mode by default
-audio.offload.gapless.enabled=true
-
-#multi offload
-audio.offload.multiple.enabled=false
-
-#enable pbe effects
-audio.safx.pbe.enabled=true
-#AudioSphere Post processing
-audio.pp.asphere.enabled=false
-
-#enable DS2 dap
-audio.dolby.ds2.enabled=true
-
-persist.speaker.prot.enable=true
-qcom.hw.aac.encoder=true
+persist.vendor.audio.fluence.voicerec=false
+vendor.voice.voip.conc.disabled=true
 
 # Selects CoreSight configuration to enable
 persist.debug.coresight.config=stm-events
