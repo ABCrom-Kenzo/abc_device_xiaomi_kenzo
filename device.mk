@@ -326,8 +326,6 @@ PRODUCT_PROPERTY_OVERRIDES += \
 
 $(call inherit-product, $(LOCAL_PATH)/treble.mk)
 
-$(call inherit-product, $(LOCAL_PATH)/utils.mk)
-
 # for off charging mode
 PRODUCT_PACKAGES += \
     charger_xiaomi
