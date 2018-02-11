@@ -1,29 +1,44 @@
-[/system/vendor/bin/wcnss_filter]
-mode: 0755
-user: AID_BLUETOOTH
-group: AID_BLUETOOTH
-caps: BLOCK_SUSPEND
+[AID_QCOM_DIAG]
+value:2950
 
-[system/vendor/bin/cnss-daemon]
-mode: 0755
-user: AID_SYSTEM
-group: AID_SYSTEM
-caps: NET_BIND_SERVICE
+[AID_RFS]
+value:2951
 
-[system/vendor/bin/pm-service]
+[AID_RFS_SHARED]
+value:2952
+
+[system/bin/pm-service]
 mode: 0755
 user: AID_SYSTEM
 group: AID_SYSTEM
 caps: NET_BIND_SERVICE
 
-[system/vendor/bin/imsdatadaemon]
+[system/bin/imsdatadaemon]
 mode: 0755
 user: AID_SYSTEM
 group: AID_SYSTEM
 caps: NET_BIND_SERVICE
 
-[system/vendor/bin/ims_rtp_daemon]
+[system/bin/imsdatadaemon]
+mode: 0755
+user: AID_SYSTEM
+group: AID_SYSTEM
+caps: NET_BIND_SERVICE
+
+[system/bin/ims_rtp_daemon]
 mode: 0755
 user: AID_SYSTEM
 group: AID_RADIO
+caps: NET_BIND_SERVICE
+
+[system/bin/cnss-daemon]
+mode: 0755
+user: AID_SYSTEM
+group: AID_SYSTEM
+caps: NET_BIND_SERVICE
+
+[system/vendor/bin/slim_daemon]
+mode: 0755
+user: AID_SYSTEM
+group: AID_GPS
 caps: NET_BIND_SERVICE
