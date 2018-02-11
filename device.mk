@@ -119,21 +119,21 @@ PRODUCT_PACKAGES += \
 
 # GPS
 PRODUCT_PACKAGES += \
-    com.android.location.provider \
-    gps.msm8952
+    gps.msm8952 \
+    libcurl \
+    flp.conf \
+    gps.conf \
+    izat.conf \
+    lowi.conf \
+    sap.conf \
+    xtwifi.conf
 
+# IPC router config
 PRODUCT_COPY_FILES += \
-    $(LOCAL_PATH)/configs/gps.conf:system/etc/gps.conf \
-    $(LOCAL_PATH)/configs/flp.conf:system/etc/flp.conf \
-    $(LOCAL_PATH)/configs/izat.conf:system/etc/izat.conf \
-    $(LOCAL_PATH)/configs/lowi.conf:system/etc/lowi.conf \
-    $(LOCAL_PATH)/configs/sap.conf:system/etc/sap.conf \
-    $(LOCAL_PATH)/configs/xtwifi.conf:system/etc/xtwifi.conf \
     $(LOCAL_PATH)/configs/sec_config:system/etc/sec_config
 
 # Irq balance
 PRODUCT_COPY_FILES += \
-    $(LOCAL_PATH)/configs/msm_irqbalance.conf:$(TARGET_COPY_OUT_VENDOR)/etc/msm_irqbalance.conf \
     $(LOCAL_PATH)/configs/msm_irqbalance_little_big.conf:$(TARGET_COPY_OUT_VENDOR)/etc/msm_irqbalance_little_big.conf
 
 # Input
@@ -251,14 +251,6 @@ PRODUCT_PACKAGES += \
     rild_socket \
     Stk
 
-PRODUCT_COPY_FILES += \
-    $(LOCAL_PATH)/configs/mbn_ota.txt:$(TARGET_COPY_OUT_VENDOR)/etc/mbn_ota.txt
-
-PRODUCT_COPY_FILES += \
-    $(LOCAL_PATH)/configs/dsi_config.xml:system/etc/data/dsi_config.xml \
-    $(LOCAL_PATH)/configs/netmgr_config.xml:system/etc/data/netmgr_config.xml \
-    $(LOCAL_PATH)/configs/qmi_config.xml:system/etc/data/qmi_config.xml
-
 # Seccomp policy
 PRODUCT_COPY_FILES += \
     $(LOCAL_PATH)/seccomp_policy/mediacodec.policy:$(TARGET_COPY_OUT_VENDOR)/etc/seccomp_policy/mediacodec.policy \
@@ -266,8 +258,8 @@ PRODUCT_COPY_FILES += \
 
 # Sensors
 PRODUCT_COPY_FILES += \
-    $(LOCAL_PATH)/configs/sensor_def_qcomdev.conf:system/etc/sensors/sensor_def_qcomdev.conf \
-    $(LOCAL_PATH)/configs/hals.conf:$(TARGET_COPY_OUT_VENDOR)/etc/sensors/hals.conf
+    $(LOCAL_PATH)/configs/sensors/hals.conf:$(TARGET_COPY_OUT_VENDOR)/etc/sensors/hals.conf \
+    $(LOCAL_PATH)/configs/sensors/sensor_def_qcomdev.conf:system/etc/sensors/sensor_def_qcomdev.conf
 
 # Telephony packages
 PRODUCT_PACKAGES += \
