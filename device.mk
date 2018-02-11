@@ -248,7 +248,6 @@ PRODUCT_PACKAGES += \
 PRODUCT_PACKAGES += \
     librmnetctl \
     libxml2 \
-    rild_socket \
     Stk
 
 # Seccomp policy
@@ -260,6 +259,10 @@ PRODUCT_COPY_FILES += \
 PRODUCT_COPY_FILES += \
     $(LOCAL_PATH)/configs/sensors/hals.conf:$(TARGET_COPY_OUT_VENDOR)/etc/sensors/hals.conf \
     $(LOCAL_PATH)/configs/sensors/sensor_def_qcomdev.conf:system/etc/sensors/sensor_def_qcomdev.conf
+
+# Protobuf
+PRODUCT_PACKAGES += \
+    libprotobuf-cpp-full
 
 # Telephony packages
 PRODUCT_PACKAGES += \
