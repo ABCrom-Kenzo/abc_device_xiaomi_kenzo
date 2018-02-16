@@ -404,39 +404,10 @@ service rmt_storage /vendor/bin/rmt_storage
     shutdown critical
     writepid /dev/cpuset/system-background/tasks
 
-service rfs_access /vendor/bin/rfs_access
-   class core
-   user root
-   group system net_raw
-
 service tftp_server /vendor/bin/tftp_server
    class main
    user root
    group root wakelock 3012
-
-on property:wc_transport.start_hci=true
-    start start_hci_filter
-
-on property:wc_transport.start_hci=false
-    stop start_hci_filter
-
-service start_hci_filter /vendor/bin/wcnss_filter
-    class late_start
-    user root
-    group bluetooth diag
-    disabled
-
-on property:wc_transport.start_root=true
-    start hci_filter_root
-
-on property:wc_transport.start_root=false
-    stop hci_filter_root
-
-service hci_filter_root /vendor/bin/wcnss_filter
-    class late_start
-    user bluetooth
-    group bluetooth system diag
-    disabled
 
 service hciattach /system/bin/sh /vendor/etc/init.qcom.bt.sh
     class late_start
@@ -452,24 +423,12 @@ on property:bluetooth.hciattach=true
 on property:bluetooth.hciattach=false
     setprop bluetooth.status off
 
-service bridgemgrd /vendor/bin/bridgemgrd
-    class late_start
-    user radio
-    group radio diag
-    disabled
-
 service port-bridge /vendor/bin/port-bridge /dev/mhi_pipe_32 /dev/ttyGS0
     class main
     user radio system
     group radio system inet
     disabled
     oneshot
-
-service qmiproxy /vendor/bin/qmiproxy
-    class main
-    user radio
-    group radio diag
-    disabled
 
 # QMUX must be in multiple groups to support external process connections
 service qmuxd /vendor/bin/qmuxd
@@ -484,13 +443,6 @@ service netmgrd /vendor/bin/netmgrd
     disabled
     writepid /dev/cpuset/system-background/tasks
     setenv LD_LIBRARY_PATH /system/vendor/lib64/legacy
-
-service ipacm /vendor/bin/ipacm
-    class main
-    user net_admin
-    group net_admin inet
-    disabled
-    writepid /dev/cpuset/system-background/tasks
 
 service qti /vendor/bin/qti
     class main
@@ -561,22 +513,10 @@ service qcom-sh /system/bin/sh /init.qcom.sh
 on property:sys.boot_completed=1
     start atfwd
 
-service ims_regmanager /vendor/bin/exe-ims-regmanagerprocessnative
-    class late_start
-    group net_bt_admin inet radio wifi
-    disabled
-
-on property:persist.ims.regmanager.mode=1
-    start ims_regmanager
-
 on property:ro.data.large_tcp_window_size=true
     # Adjust socket buffer to enlarge TCP receive window for high bandwidth (e.g. DO-RevB)
     write /proc/sys/net/ipv4/tcp_adv_win_scale  2
 
-service battery_monitor /vendor/bin/battery_monitor
-    user system
-    group system
-    disabled
 
 service ril-daemon2 /vendor/bin/hw/rild -c 2
     class main
@@ -589,11 +529,6 @@ service charger /charger
     group system graphics
     seclabel u:r:charger:s0
 
-service charger_monitor /vendor/bin/charger_monitor
-    user root
-    group root
-    disabled
-
 service qbcharger /charger -m 1
     disabled
     oneshot
@@ -605,12 +540,6 @@ on property:sys.qbcharger.enable=true
 on property:sys.qbcharger.enable=false
     write /sys/power/wake_unlock QuickBoot
     stop qbcharger
-
-service bms-sh /system/bin/sh /init.qcom.bms.sh
-    class main
-    user root
-    oneshot
-    seclabel u:r:qti_init_shell:s0
 
 service msm_irqbalance /vendor/bin/msm_irqbalance -f /vendor/etc/msm_irqbalance.conf
     class core

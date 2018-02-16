@@ -77,11 +77,6 @@ service qcamerasvr /vendor/bin/mm-qcamera-daemon
 on init
     write /sys/module/qpnp_rtc/parameters/poweron_alarm 1
 
-service qfp-daemon /vendor/bin/qfp-daemon
-    class late_start
-    user system
-    group system drmrpc
-
 # Allow usb charging to be disabled peristently
 on property:persist.usb.chgdisabled=1
     write /sys/class/power_supply/battery/charging_enabled 0
@@ -102,13 +97,6 @@ service perfd /vendor/bin/perfd
     socket perfd seqpacket 0666 root system
     writepid /dev/cpuset/system-background/tasks
 
-service seempd /vendor/bin/seempd
-    class late_start
-    user system
-    group system
-    socket seempdw dgram 0666 system system
-    oneshot
-
 service thermal-engine /vendor/bin/thermal-engine
     class main
     user root
@@ -117,11 +105,6 @@ service thermal-engine /vendor/bin/thermal-engine
     socket thermal-recv-passive-client stream 0666 system system
     group root
     writepid /dev/cpuset/system-background/tasks
-
-service audiod /vendor/bin/audiod
-    class late_start
-    user system
-    group system
 
 on boot
     # access permission for secure touch
@@ -206,18 +189,6 @@ on property:init.svc.zygote=running
 on property:init.svc.zygote=restarting
     stop ppd
 
-service dts_configurator /vendor/bin/dts_configurator
-    class late_start
-    user system
-    group media audio
-    oneshot
-
-service dtseagleservice /vendor/bin/dts_eagle_service
-    class late_start
-    user system
-    group audio media
-    disabled
-
 service adsprpcd /vendor/bin/adsprpcd
     class main
     user media
@@ -245,13 +216,6 @@ on property:init.svc.per_mgr=running
 
 on property:sys.shutdown.requested=*
     stop per_proxy
-
-service energy-awareness /vendor/bin/energy-awareness
-    class main
-    user root
-    group system
-    oneshot
-    disabled
 
 on boot
     write /sys/devices/soc.0/78b8000.i2c/i2c-4/4-0020/input/input0/fw_name PR1702898-s3528t_00260005_00380008.img
