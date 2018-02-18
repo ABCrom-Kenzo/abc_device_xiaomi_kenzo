@@ -202,7 +202,6 @@ BOARD_FLASH_BLOCK_SIZE := 131072 # (BOARD_KERNEL_PAGESIZE * 64)
 # Enable dex-preoptimization to speed up first boot sequence
 WITH_DEXPREOPT := true
 DONT_DEXPREOPT_PREBUILTS := true
-WITH_DEXPREOPT_BOOT_IMG_AND_SYSTEM_SERVER_ONLY := true
 
 # Enable peripheral manager
 TARGET_PER_MGR_ENABLED := true
